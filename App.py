@@ -54,6 +54,19 @@ class App:
         with open(file, mode='r', newline='') as csvfile:
             user_data_reader = csv.DictReader(csvfile)
             for row in user_data_reader:
+                friends = row['friends']
+                posts = row['posts']
+                
+                if friends == '':
+                    friends = []
+                else:
+                    friends = friends.split('/')
+                
+                if posts == '':
+                    posts = []
+                else:
+                    posts = posts.split('/')
+                
                 user = User(
                     username = row['username'],
                     password = row['password'],
@@ -61,24 +74,16 @@ class App:
                     last_name = row['last_name'],
                     dob = row['dob'],
                     email = row['email'],
+                    friends = friends,
+                    posts = posts
                 )
+                
                 users.append(user)
         return users
     
-    # def home(self, user):
-    #     menu_selction = 0
-    #     user = user
-    #     while menu_selction < 5:
-    #         for item in self.HOME:
-    #             print(item)
-            
-    #         if menu_selction == 0:
-    #             try:
-    #                 menu_selction = int(input('Enter menu number: '))
-    #             except ValueError:
-    #                 print('Invalid selection. Please try again.')
-    #                 menu_selction = 0
-    #         if menu_selction == 1:
+    def view_users(self):
+        for user in self.users:
+            print(user.get_username)
     
     # def home(self, user):
     #     menu_selction = 0
@@ -94,6 +99,31 @@ class App:
     #                 print('Invalid selection. Please try again.')
     #                 menu_selction = 0
     #         if menu_selction == 1:
+    
+    def friends(self, user):
+        menu_selction = 0
+        user = user
+        while menu_selction < 4:
+            for item in self.FRIENDS:
+                print(item)
+            
+            if menu_selction == 0:
+                try:
+                    menu_selction = int(input('Enter menu number: '))
+                except ValueError:
+                    print('Invalid selection. Please try again.')
+                    menu_selction = 0
+            if menu_selction == 1:
+                print(f'{user.get_first_name}\'s friends:')
+                for friend in user.get_friends:
+                    print(friend)
+                menu_selction = 0
+            if menu_selction == 2:
+                self.view_users()
+                friend = str(User.get_user_by_username())
+                if friend:
+                    user.set_friends = friend
+                menu_selction = 0
     
     def profile(self, user):
         menu_selction = 0
@@ -154,6 +184,8 @@ class App:
                     menu_selction = 0
             if menu_selction == 1:
                 self.profile(user)
+            if menu_selction == 2:
+                self.friends(user)
                 
     def run_app(self):
         menu_selction = 0

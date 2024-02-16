@@ -18,7 +18,7 @@ class User:
     def create_user(cls) -> dict:
         pass
 
-    def __init__(self, username, password, first_name, last_name, dob, email):
+    def __init__(self, username, password, first_name, last_name, dob, email, friends=[], posts=[]):
         User.total_users = len(User.all_users)
         self._username = username
         self._password = password
@@ -26,13 +26,15 @@ class User:
         self._last_name = last_name
         self._dob = dob
         self._email = email
+        self._friends = friends
+        self._posts = posts
 
     
     def __str__(self):
-        return f'\n{self.get_username}: password: {self.get_password}, {self.get_full_name} born on {self.get_dob} and their email is {self.get_email}.'
+        return f'\n{self.get_username}: password: {self.get_password}, {self.get_full_name} born on {self.get_dob}, their email is {self.get_email}, their friends are {self.get_friends}.'
     
     def __repr__(self):
-        return f'\n{self.get_username}: password: {self.get_password}, {self.get_full_name} born on {self.get_dob} and their email is {self.get_email}.'
+        return f'\n{self.get_username}: password: {self.get_password}, {self.get_full_name} born on {self.get_dob}, their email is {self.get_email}, their friends are {self.get_friends}.'
     
     @property
     def get_username(self):
@@ -121,3 +123,19 @@ class User:
         else:
             print('Email must be a string.')
             self.set_email = input('Email: ')
+    
+    @property
+    def get_friends(self):
+        return self._friends
+    
+    @get_friends.setter
+    def set_friends(self, friend):
+        if isinstance(friend, str):
+            if friend in [friend.get_username for friend in User.all_users]:
+                self._friends.append(friend)
+            else: 
+                print('Username not found. Try again')
+                self.set_friends = input('Search usernames: ')
+        else:
+            print('Username must be a string.')
+            self.set_friends = input('Search usernames: ')
